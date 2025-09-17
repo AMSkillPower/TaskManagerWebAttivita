@@ -678,6 +678,11 @@ const TaskDetail: React.FC = () => {
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none h-12"
           />
 
+          <CommentIntegrationStatus 
+            results={integrationResults}
+            loading={integrationLoading}
+          />
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
             {/* Data */}
             <div className="flex flex-col">
