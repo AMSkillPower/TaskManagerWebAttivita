@@ -11,6 +11,8 @@
     "start": "concurrently \"npm run server\" \"npm run dev\""
   },
   "dependencies": {
+    "@azure/msal-browser": "^4.22.1",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@types/date-fns": "^2.5.3",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

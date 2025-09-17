@@ -27,6 +27,8 @@ import {
 import { useApp } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "./ConfirmModal";
+import { integrationService } from "../services/integrationService";
+import CommentIntegrationStatus from "./CommentIntegrationStatus";
 
 const TaskDetail: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -92,6 +94,11 @@ const TaskDetail: React.FC = () => {
   const [giorno, setGiorno] = useState(new Date()); // giorno comune, default oggi
   const [oraInizio, setOraInizio] = useState("09:00");
   const [oraFine, setOraFine] = useState("17:00");
+  const [integrationResults, setIntegrationResults] = useState<{
+    calendar: boolean;
+    sharepoint: boolean;
+  } | null>(null);
+  const [integrationLoading, setIntegrationLoading] = useState(false);
 
   // Modifica handleEditComment
   const handleEditComment = (comment: Comment) => {
@@ -106,6 +113,9 @@ const TaskDetail: React.FC = () => {
 
   const handleAddComment = async () => {
     if (!task || !newComment.trim()) return;
+
+    setIntegrationLoading(true);
+    setIntegrationResults(null);
 
     try {
       const [hInizio, mInizio] = oraInizio.split(":").map(Number);
@@ -134,11 +144,27 @@ const TaskDetail: React.FC = () => {
         dataInizio: dataInizioUTC.toISOString(),
         dataFine: dataFineUTC.toISOString(),
       });
+      
       setCommentiList((prev) => [comment, ...prev]);
       setNewComment("");
+
+      // Processa integrazioni in background
+      try {
+        const results = await integrationService.processCommentIntegration(
+          comment,
+          task,
+          user?.email
+        );
+        setIntegrationResults(results);
+      } catch (integrationError) {
+        console.error('Errore nelle integrazioni:', integrationError);
+        setIntegrationResults({ calendar: false, sharepoint: false });
+      }
     } catch (error) {
       console.error("Error adding comment:", error);
       alert("Errore durante l'aggiunta del commento");
+    } finally {
+      setIntegrationLoading(false);
     }
   };
 

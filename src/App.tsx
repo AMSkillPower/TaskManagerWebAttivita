@@ -7,6 +7,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { integrationService } from "./services/integrationService";
 import Layout from "./components/Layout";
 import LoginForm from "./components/LoginForm";
 import Dashboard from "./components/Dashboard";
@@ -25,6 +26,9 @@ function App() {
 
   // Aggiungi l'event listener per navigateWithSearch
   useEffect(() => {
+    // Inizializza servizi di integrazione
+    integrationService.initializeServices().catch(console.error);
+
     const handleNavigateWithSearch = (event: CustomEvent) => {
       const { page, searchTerm } = event.detail;
       navigate(`/${page}?search=${encodeURIComponent(searchTerm)}`);
