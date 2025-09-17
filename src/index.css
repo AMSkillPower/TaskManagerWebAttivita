@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.task-detail-enter {
+  opacity: 0;
+}
+.task-detail-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.task-detail-exit {
+  opacity: 1;
+}
+.task-detail-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+tr:hover {
+  background-color: #f9fafb; /* bg-gray-50 */
+  transition: background-color 0.2s ease;
+}
